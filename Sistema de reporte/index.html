@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe de ventas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/Chart.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="h2">
+        <h2>Agregar venta</h2>
+    </div>
+    
+    <form id="add-form" class="from">
+        <input type="text" id="add-cliente" name="cliente" placeholder="Cliente">
+        <input type="date" id="add-fecha" name="fecha">
+        <input type="text" id="add-producto" name="producto" placeholder="Producto">
+        <input type="number" id="add-total" name="total" placeholder="Total">
+        <button type="submit" class="button">Agregar</button>
+    </form>
+
+    <header>
+        <h1 class="h1">Informe de ventas</h1>
+        <hr>
+    </header>
+    <main>
+        <section>
+            <h2>Filtrar ventas</h2>
+            <form id="filter-form" class="section">
+                <label for="cliente">Cliente:</label>
+                <input type="text" id="cliente" name="cliente">
+                <button type="submit" class="button2">Filtrar</button>
+            </form>
+        </section>
+        <section>
+            <h2 class="h2-2">->Ventas</h2>
+            <hr class="hr">
+            <table id="ventas-table" class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Detalles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>Informe &copy; Ant-Group</p>
+    </footer>
+
+    <script>
+        var ventas = [
+     { id: 1, cliente: 'Esmeralda', fecha: '05-01-2023', total: 1000, detalles: ['Leche', 'Pan', 'Huevos'] },
+     { id: 2, cliente: 'Ruvi', fecha: '05-01-2023', total: 1500, detalles: ['Arroz', 'Frijoles', 'Aceite'] },
+     { id: 3, cliente: 'Perla', fecha: '06-01-2023', total: 2000, detalles: ['Carne', 'Pollo', 'Pescado'] },
+     { id: 4, cliente: 'Amatista', fecha: '07-01-2023', total: 4000, detalles: ['Frutas', 'Verduras', 'Queso'] },
+     { id: 5, cliente: 'Amatista', fecha: '07-01-2023', total: 5000, detalles: ['Cereal', 'Yogur', 'Mantequilla'] },
+     { id: 6, cliente: 'Ambar Sanchéz', fecha: '10-01-2023', total: 4000, detalles: ['Refrescos', 'Agua', 'Jugos'] },
+     { id: 7, cliente: 'Mirabel de la cruz', fecha: '11-01-2023', total: 4000, detalles: ['Papel higiénico', 'Detergente', 'Jabón'] },
+     { id: 8, cliente: 'Jose Hernandez', fecha: '13-01-2023', total: 4000, detalles: ['Cepillo de dientes', 'Pasta dental', 'Enjuague bucal'] },
+     { id: 9, cliente: 'Ruby', fecha: '13-01-2023', total: 2500, detalles: ['Galletas', 'Snacks', 'Chocolate'] },
+     { id: 10, cliente: 'Diamante', fecha: '14-01-2023', total: 3000, detalles: ['Café', 'Té', 'Azúcar'] },
+     { id: 11, cliente: 'Zafiro', fecha: '01-02-2023', total: 1800, detalles: ['Pasta', 'Salsa de tomate', 'Queso rallado'] },
+     { id: 12, cliente: 'Topacio', fecha: '21-02-2023', total: 2200, detalles: ['Papel aluminio', 'Bolsas de plástico', 'Papel film'] },
+     { id: 13, cliente: 'Ópalo', fecha: '23-02-2023', total: 3500, detalles: ['Cerveza', 'Vino', 'Licor'] },
+     { id: 14, cliente: 'Jade', fecha: '26-02-2023', total: 2800, detalles: ['Pasta de dientes', 'Cepillo de pelo', 'Gel de baño'] },
+     { id: 15, cliente: 'Ágata', fecha: '29-02-2023', total: 1900, detalles: ['Papel higiénico', 'Toallas de papel', 'Servilletas'] },
+     {id: 16, cliente: 'Coral', fecha: '01-03-2023', total: 3200, detalles: ['Leche', 'Yogur', 'Queso'] },
+     { id: 17, cliente: 'Ónice', fecha: '10-03-2023', total: 2700, detalles: ['Carne', 'Pollo', 'Pescado'] },
+     { id: 18, cliente: 'Turquesa', fecha: '19-03-2023', total: 2300, detalles: ['Frutas', 'Verduras', 'Pan'] },
+     { id: 19, cliente: 'Citrino', fecha: '15-04-2023', total: 2900, detalles: ['Cereal', 'Avena', 'Miel'] },
+     { id: 20, cliente: 'Granate', fecha: '16-04-2023', total: 1800, detalles: ['Refrescos', 'Agua', 'Jugos'] },
+     { id: 21, cliente: 'Ámbar', fecha: '16-04-2023', total: 2500, detalles: ['Papel higiénico', 'Detergente', 'Jabón'] },
+     { id: 22, cliente: 'Ónice', fecha: '17-04-2023', total: 3100, detalles: ['Cepillo de dientes', 'Pasta dental', 'Enjuague bucal'] },
+     { id: 23, cliente: 'Coral', fecha: '03-05-2023', total: 2400, detalles: ['Galletas', 'Snacks', 'Chocolate'] },
+     { id: 24, cliente: 'Turquesa', fecha: '02-05-2023', total: 2700, detalles: ['Café', 'Té', 'Azúcar'] },
+     { id: 25, cliente: 'Citrino', fecha: '10-05-2023', total: 3200, detalles: ['Pasta', 'Salsa de tomate', 'Queso rallado'] },
+     { id: 26, cliente: 'Granate', fecha: '15-05-2023', total: 2100, detalles: ['Papel aluminio', 'Bolsas de plástico', 'Papel film'] },
+     { id: 27, cliente: 'Ámbar', fecha: '24-05-2023', total: 2800, detalles: ['Cerveza', 'Vino', 'Licor'] },
+     { id: 28, cliente: 'Ópalo', fecha: '24-05-2023', total: 3300, detalles: ['Pasta de dientes', 'Cepillo de pelo', 'Gel de baño'] },
+     { id: 29, cliente: 'Jade', fecha: '30-05-2023', total: 2200, detalles: ['Papel higiénico', 'Toallas de papel', 'Servilletas'] },
+     { id: 30, cliente: 'Zafiro', fecha: '30-05-2023', total: 2900, detalles: ['Leche', 'Yogur', 'Queso'] }
+     ];
+
+            
+        
+
+           // ...
+        function filtrarVentas() {
+           var cliente = document.getElementById('cliente').value;
+           var ventasFiltradas = ventas.filter(function(venta) {
+             return venta.cliente.toLowerCase().includes(cliente.toLowerCase());
+           });
+           actualizarTabla(ventasFiltradas);
+        }
+       
+        function actualizarTabla(ventas) {
+           var tabla = document.getElementById('ventas-table');
+           var tbody = tabla.getElementsByTagName('tbody')[0];
+           tbody.innerHTML = '';
+           ventas.forEach(function(venta) {
+             var tr = document.createElement('tr');
+             var tdId = document.createElement('td');
+             var tdCliente = document.createElement('td');
+             var tdFecha = document.createElement('td');
+             var tdTotal = document.createElement('td');
+             var tdDetalles = document.createElement('td');
+             tdId.textContent = venta.id;
+             tdCliente.textContent = venta.cliente;
+             tdFecha.textContent = venta.fecha;
+             tdTotal.textContent = venta.total;
+             tdDetalles.innerHTML = '<button class="btn btn-sm btn-info" onclick="mostrarDetalles(' + venta.id + ')">Mostrar detalles</button>';
+             tr.appendChild(tdId);
+             tr.appendChild(tdCliente);
+             tr.appendChild(tdFecha);
+             tr.appendChild(tdTotal);
+             tr.appendChild(tdDetalles);
+             tbody.appendChild(tr);
+           });
+        }
+       
+        function mostrarDetalles(id) {
+           var venta = ventas.find(function(venta) {
+             return venta.id === id;
+           });
+           alert('Detalles de la venta:\n\n' + venta.detalles.join('\n'));
+        }
+       
+        document.getElementById('filter-form').addEventListener('submit', function(event) {
+           event.preventDefault();
+           filtrarVentas();
+        });
+        function agregarVenta() {
+            var cliente = document.getElementById('add-cliente').value;
+            var fecha = document.getElementById('add-fecha').value;
+            var producto = document.getElementById('add-producto').value;
+            var total = parseInt(document.getElementById('add-total').value);
+            var detalles = [producto];
+            var nuevaVenta = { id: ventas.length + 1, cliente: cliente, fecha: fecha, total: total, detalles: detalles };
+            ventas.push(nuevaVenta);
+            actualizarTabla(ventas);
+        }
+
+        document.getElementById('add-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            agregarVenta();
+        });
+        
+        actualizarTabla(ventas);
+
+    </script>
+       
+       <h1>Reporte de ventas</h1>
+       <a href="../index.html"> Inicio </a>
+       <canvas id="grafica"></canvas>
+       <script src="../GraficA/script.js"></script>
+
+</body>
+</html>
